@@ -13,6 +13,11 @@ const Landing = ({ children }: PropsWithChildren) => {
               <br />
               <span>KUMAR</span>
             </h1>
+            <div className="landing-tags">
+              <span className="tag">AI Systems</span>
+              <span className="tag">Automation</span>
+              <span className="tag">GenAI</span>
+            </div>
           </div>
           <div className="landing-info">
             <h3>An AI</h3>
