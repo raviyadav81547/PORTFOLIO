@@ -34,7 +34,6 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     bar.className = "scroll-indicator";
     bar.style.width = "0%";
     document.body.appendChild(bar);
-
     const onScroll = () => {
       const scrollTop = window.scrollY;
       const docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -42,10 +41,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       bar.style.width = pct + "%";
     };
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-      bar.remove();
-    };
+    return () => { window.removeEventListener("scroll", onScroll); bar.remove(); };
   }, []);
 
   // SCROLL REVEAL
@@ -75,9 +71,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
           const y = (e.clientY - r.top) / r.height - 0.5;
           card.style.transform = `perspective(700px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg)`;
         });
-        card.addEventListener("mouseleave", () => {
-          card.style.transform = "";
-        });
+        card.addEventListener("mouseleave", () => { card.style.transform = ""; });
       });
     };
     const t = setTimeout(addTilt, 1000);
