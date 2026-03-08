@@ -1,10 +1,14 @@
 import { lazy, PropsWithChildren, Suspense, useEffect, useState } from "react";
 import About from "./About";
+import AppleScene from "./AppleScene";
 import Career from "./Career";
+import Certifications from "./Certifications";
 import Contact from "./Contact";
 import Cursor from "./Cursor";
 import Landing from "./Landing";
+import MegaEffects from "./MegaEffects";
 import Navbar from "./Navbar";
+import ParticleField from "./ParticleField";
 import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
@@ -64,7 +68,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     return () => io.disconnect();
   }, []);
 
-  // 3D CARD TILT on work-box
+  // 3D CARD TILT
   useEffect(() => {
     const addTilt = () => {
       document.querySelectorAll<HTMLElement>(".work-box").forEach((card) => {
@@ -79,13 +83,46 @@ const MainContainer = ({ children }: PropsWithChildren) => {
         });
       });
     };
-    // Delay to let DOM settle
     const t = setTimeout(addTilt, 1000);
     return () => clearTimeout(t);
   }, []);
 
+  // PARALLAX on scroll
+  useEffect(() => {
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+      // Parallax on hero text
+      const intro = document.querySelector<HTMLElement>(".landing-intro");
+      if (intro) {
+        intro.style.transform = `translateY(${scrollY * 0.12}px)`;
+      }
+      // Subtle section parallax
+      document.querySelectorAll<HTMLElement>(".parallax-slow").forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        const offset = (rect.top + scrollY) * 0.04;
+        el.style.transform = `translateY(${-offset * 0.3}px)`;
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  // FLOATING PARTICLES
+  useEffect(() => {
+    const particles = ["particle-1", "particle-2", "particle-3"].map((cls) => {
+      const el = document.createElement("div");
+      el.className = `particle ${cls}`;
+      document.body.appendChild(el);
+      return el;
+    });
+    return () => particles.forEach((p) => p.remove());
+  }, []);
+
   return (
     <div className="container-main">
+      <ParticleField />
+      <MegaEffects />
+      <AppleScene />
       <Cursor />
       <Navbar />
       <SocialIcons />
@@ -98,6 +135,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
             <WhatIDo />
             <Career />
             <Work />
+            <Certifications />
             {isDesktopView && (
               <Suspense fallback={<div>Loading....</div>}>
                 <TechStack />
