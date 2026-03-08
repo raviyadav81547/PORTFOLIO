@@ -6,7 +6,67 @@ const Cursor = () => {
   const cursorRef = useRef<HTMLDivElement>(null);
   const trailRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
+  const blobRef = useRef<HTMLCanvasElement>(null);
 
+  // FLUID BLOB CURSOR
+  useEffect(() => {
+    const canvas = blobRef.current!;
+    const ctx = canvas.getContext("2d")!;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener("resize", resize);
+
+    const blobs: { x: number; y: number; tx: number; ty: number; r: number; alpha: number }[] = [];
+    for (let i = 0; i < 6; i++) {
+      blobs.push({ x: window.innerWidth / 2, y: window.innerHeight / 2, tx: 0, ty: 0, r: 18 - i * 2, alpha: 0.06 - i * 0.008 });
+    }
+
+    let mx = window.innerWidth / 2;
+    let my = window.innerHeight / 2;
+    let isHover = false;
+
+    document.addEventListener("mousemove", (e) => { mx = e.clientX; my = e.clientY; });
+    document.querySelectorAll("a, button, .work-box").forEach(el => {
+      el.addEventListener("mouseenter", () => { isHover = true; });
+      el.addEventListener("mouseleave", () => { isHover = false; });
+    });
+
+    let raf: number;
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      blobs[0].tx = mx;
+      blobs[0].ty = my;
+      for (let i = 1; i < blobs.length; i++) {
+        blobs[i].tx = blobs[i - 1].x;
+        blobs[i].ty = blobs[i - 1].y;
+      }
+      blobs.forEach((b, i) => {
+        b.x += (b.tx - b.x) * (0.25 - i * 0.025);
+        b.y += (b.ty - b.y) * (0.25 - i * 0.025);
+        const r = isHover ? b.r * 2.5 : b.r;
+        const grad = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, r);
+        grad.addColorStop(0, `rgba(196,129,255,${b.alpha * (isHover ? 1.8 : 1)})`);
+        grad.addColorStop(1, "rgba(196,129,255,0)");
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = grad;
+        ctx.fill();
+      });
+      raf = requestAnimationFrame(draw);
+    };
+    draw();
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", resize);
+    };
+  }, []);
+
+  // ORIGINAL CURSOR LOGIC
   useEffect(() => {
     let hover = false;
     const cursor = cursorRef.current!;
@@ -59,6 +119,7 @@ const Cursor = () => {
 
   return (
     <>
+      <canvas className="cursor-blob-canvas" ref={blobRef} />
       <div className="cursor-main" ref={cursorRef}></div>
       <div className="cursor-trail" ref={trailRef}></div>
       <div className="cursor-glow" ref={glowRef}></div>
