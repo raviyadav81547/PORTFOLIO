@@ -1,0 +1,96 @@
+/* Container injected into .character-model */
+.apple-logo-container {
+  position: absolute;
+  /* iMac is roughly center-right — adjust these to hit the pink screen back */
+  top: 38%;
+  left: 62%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* Universe glow burst */
+.apple-glow-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 180, 255, 0.9) 0%,
+    rgba(196, 129, 255, 0.5) 30%,
+    rgba(100, 0, 255, 0.2) 60%,
+    transparent 80%
+  );
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+  will-change: transform, opacity;
+  mix-blend-mode: screen;
+}
+
+/* Apple logo SVG wrapper */
+.apple-logo-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 52px;
+  height: 52px;
+  transform: translate(-50%, -50%) scale(1);
+  will-change: transform, opacity, filter;
+  transform-origin: center center;
+}
+
+.apple-logo-svg svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: #e8b4ff;
+  stroke-width: 22;
+  filter:
+    drop-shadow(0 0 6px #c481ff)
+    drop-shadow(0 0 18px rgba(196,129,255,0.7))
+    drop-shadow(0 0 40px rgba(255,150,255,0.4));
+}
+
+/* When logo has landed — neon pulse */
+.apple-logo-svg.logo-stuck svg {
+  animation: applePulse 2.5s ease-in-out infinite;
+}
+
+@keyframes applePulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 5px #c481ff)
+      drop-shadow(0 0 14px rgba(196,129,255,0.6));
+    stroke: #e8b4ff;
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 14px #ff80ff)
+      drop-shadow(0 0 30px rgba(255,100,255,0.8))
+      drop-shadow(0 0 60px rgba(196,129,255,0.5));
+    stroke: #ffffff;
+  }
+}
+
+/* Speed lines during approach */
+.apple-logo-svg::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 4px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, rgba(196,129,255,0.6), transparent);
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: speedLine 0.3s ease-in-out;
+}
+
+@keyframes speedLine {
+  0% { opacity: 0.8; height: 120px; }
+  100% { opacity: 0; height: 20px; }
+}
