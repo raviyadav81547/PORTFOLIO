@@ -24,18 +24,8 @@ const MegaEffects = () => {
     return () => clearTimeout(t);
   }, []);
 
-  // 2. AURORA BACKGROUND
-  useEffect(() => {
-    const aurora = document.createElement("div");
-    aurora.className = "aurora-bg";
-    aurora.innerHTML = `
-      <div class="aurora-blob a1"></div>
-      <div class="aurora-blob a2"></div>
-      <div class="aurora-blob a3"></div>
-    `;
-    document.body.prepend(aurora);
-    return () => aurora.remove();
-  }, []);
+  // 2. AURORA BACKGROUND - DISABLED
+  // useEffect(() => { ... }, []);
 
   // 3. NEON GLOW BORDERS on scroll
   useEffect(() => {
@@ -75,17 +65,8 @@ const MegaEffects = () => {
     return () => { clearTimeout(t); io.disconnect(); };
   }, []);
 
-  // 5. MORPHING SHAPES BACKGROUND
-  useEffect(() => {
-    const shapes = document.createElement("div");
-    shapes.className = "morph-shapes";
-    shapes.innerHTML = `
-      <div class="morph-shape ms1"></div>
-      <div class="morph-shape ms2"></div>
-    `;
-    document.querySelector(".container-main")?.prepend(shapes);
-    return () => shapes.remove();
-  }, []);
+  // 5. MORPHING SHAPES - DISABLED
+  // useEffect(() => { ... }, []);
 
   // 6. NOISE GRAIN OVERLAY
   useEffect(() => {
