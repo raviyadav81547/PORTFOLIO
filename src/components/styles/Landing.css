@@ -278,3 +278,56 @@ h2.landing-info-h2 {
   .landing-info h2 { font-size: 65px; line-height: 62px; }
   h2.landing-info-h2 { font-size: 75px; }
 }
+
+/* ===== CINEMATIC NAME ENTRY ===== */
+.landing-hello {
+  will-change: transform, opacity;
+}
+
+.landing-name-wrap {
+  overflow: visible;
+}
+
+.landing-name-mask {
+  overflow: hidden;
+  line-height: 1.05;
+}
+
+.landing-name-ravi {
+  margin: 0;
+  letter-spacing: 2px;
+  font-size: 28px;
+  font-weight: 700;
+  font-family: "Geist", sans-serif;
+  will-change: transform, opacity;
+  line-height: 1.05;
+}
+
+.landing-name-kumar {
+  margin: 0;
+  letter-spacing: 2px;
+  font-size: 28px;
+  font-weight: 700;
+  font-family: "Geist", sans-serif;
+  will-change: transform, opacity;
+  line-height: 1.05;
+}
+
+.landing-name-kumar span {
+  color: var(--accentColor);
+}
+
+/* Override original h1 styles for new structure */
+.landing-intro h1 {
+  display: none;
+}
+
+@media screen and (min-width: 500px) {
+  .landing-name-ravi, .landing-name-kumar { font-size: 32px; }
+}
+@media screen and (min-width: 768px) {
+  .landing-name-ravi, .landing-name-kumar { font-size: 44px; }
+}
+@media screen and (min-width: 1600px) {
+  .landing-name-ravi, .landing-name-kumar { font-size: 64px; }
+}
