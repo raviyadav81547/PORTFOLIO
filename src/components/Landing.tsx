@@ -34,14 +34,33 @@ const Landing = ({ children }: PropsWithChildren) => {
   const h1Ref = useRef<HTMLHeadingElement>(null);
   const typeRef = useRef<HTMLSpanElement>(null);
 
-  // TEXT SCRAMBLE on hover
+  // TEXT SCRAMBLE on hover - only scramble visible text, keep structure
   useEffect(() => {
     const el = h1Ref.current;
     if (!el) return;
     let cancel: (() => void) | null = null;
     const onEnter = () => {
       if (cancel) cancel();
-      cancel = scramble(el, "RAVI\nKUMAR", 800);
+      // Scramble only the first text node "RAVI"
+      const firstText = el.childNodes[0];
+      if (!firstText) return;
+      const finalText = "RAVI";
+      let start: number | null = null;
+      let frame: number;
+      const step = (ts: number) => {
+        if (!start) start = ts;
+        const progress = Math.min((ts - start) / 600, 1);
+        const revealed = Math.floor(progress * finalText.length);
+        let output = "";
+        for (let i = 0; i < finalText.length; i++) {
+          output += i < revealed ? finalText[i] : CHARS[Math.floor(Math.random() * CHARS.length)];
+        }
+        firstText.textContent = output;
+        if (progress < 1) frame = requestAnimationFrame(step);
+        else firstText.textContent = "RAVI";
+      };
+      frame = requestAnimationFrame(step);
+      cancel = () => cancelAnimationFrame(frame);
     };
     el.addEventListener("mouseenter", onEnter);
     return () => el.removeEventListener("mouseenter", onEnter);
