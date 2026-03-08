@@ -7,18 +7,14 @@ function scramble(el: HTMLElement, finalText: string, duration = 1000) {
   let start: number | null = null;
   let frame: number;
   const len = finalText.length;
-
   const step = (ts: number) => {
     if (!start) start = ts;
     const progress = Math.min((ts - start) / duration, 1);
     const revealed = Math.floor(progress * len);
     let output = "";
     for (let i = 0; i < len; i++) {
-      if (i < revealed) {
-        output += finalText[i];
-      } else {
-        output += CHARS[Math.floor(Math.random() * CHARS.length)];
-      }
+      if (i < revealed) output += finalText[i];
+      else output += CHARS[Math.floor(Math.random() * CHARS.length)];
     }
     el.textContent = output;
     if (progress < 1) frame = requestAnimationFrame(step);
@@ -51,9 +47,7 @@ const Landing = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const el = typeRef.current;
     if (!el) return;
-    let wordIdx = 0;
-    let charIdx = 0;
-    let deleting = false;
+    let wordIdx = 0, charIdx = 0, deleting = false;
     let timeout: ReturnType<typeof setTimeout>;
     let glitchTimeout: ReturnType<typeof setTimeout>;
 
