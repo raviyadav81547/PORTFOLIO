@@ -11,57 +11,38 @@ const AppleScene = () => {
     const glow = glowRef.current!;
     const wrap = wrapRef.current!;
 
-    // Wait for character model to exist
-    const init = () => {
-      const charModel = document.querySelector(".character-model") as HTMLElement;
-      if (!charModel) { setTimeout(init, 500); return; }
+    let injected = false;
+    let cleanup: (() => void) | null = null;
 
-      // Inject logo overlay INTO the character-model div
+    const tryInject = () => {
+      const charModel = document.querySelector(".character-model") as HTMLElement;
+      if (!charModel) { setTimeout(tryInject, 500); return; }
+      if (injected) return;
+      injected = true;
+
       charModel.style.position = "relative";
       charModel.appendChild(wrap);
 
       const onScroll = () => {
         const rect = charModel.getBoundingClientRect();
         const vh = window.innerHeight;
-
-        // progress: 0 when section enters, 1 when fully scrolled past
         const raw = 1 - (rect.top / vh);
         const progress = Math.max(0, Math.min(1, raw));
 
-        if (progress < 0.25) {
-          // PHASE 1: Coming from universe — huge, blurry, far
-          const p = progress / 0.25;
-          const scale = 12 - p * 11; // 12 → 1
-          const opacity = p * p;
-          logo.style.transform = `translate(-50%, -50%) scale(${scale})`;
-          logo.style.opacity = String(opacity);
-          logo.style.filter = `blur(${(1 - p) * 20}px) brightness(${2 + (1-p) * 3})`;
-          glow.style.opacity = String(p * 0.9);
-          glow.style.transform = `translate(-50%, -50%) scale(${4 - p * 3})`;
-        } else if (progress < 0.55) {
-          // PHASE 2: Zooming in fast — neon trails
-          const p = (progress - 0.25) / 0.30;
-          logo.style.transform = `translate(-50%, -50%) scale(${1 + (1-p) * 0.3})`;
+        if (progress < 0.2) {
+          const p = progress / 0.2;
+          logo.style.transform = `translate(-50%, -50%) scale(${10 - p * 9})`;
+          logo.style.opacity = String(p * p);
+          logo.style.filter = `blur(${(1 - p) * 15}px) brightness(${3 - p * 2})`;
+          glow.style.opacity = String(p * 0.8);
+        } else if (progress < 0.5) {
+          const p = (progress - 0.2) / 0.3;
+          logo.style.transform = `translate(-50%, -50%) scale(${1 + (1-p)*0.5})`;
           logo.style.opacity = "1";
-          logo.style.filter = `blur(0px) brightness(${1 + (1-p) * 1.5})`;
-          glow.style.opacity = String(0.9 - p * 0.5);
-          glow.style.transform = `translate(-50%, -50%) scale(${1 + (1-p) * 0.5})`;
-          // Neon color animation
-          const hue = Math.floor(270 + p * 60);
-          logo.style.setProperty("--logo-hue", String(hue));
-        } else if (progress < 0.75) {
-          // PHASE 3: STICK — logo lands, outline pulses
-          const p = (progress - 0.55) / 0.20;
-          logo.style.transform = `translate(-50%, -50%) scale(${1 - p * 0.05})`;
-          logo.style.opacity = "1";
-          logo.style.filter = "blur(0px) brightness(1)";
-          glow.style.opacity = String(0.4 - p * 0.2);
-          glow.style.transform = `translate(-50%, -50%) scale(1)`;
-          // Add "stuck" class for pulse animation
-          if (p > 0.5) logo.classList.add("logo-stuck");
+          logo.style.filter = `blur(0px) brightness(${1 + (1-p)})`;
+          glow.style.opacity = String(0.8 - p * 0.5);
         } else {
-          // PHASE 4: Settled glowing apple logo
-          logo.style.transform = `translate(-50%, -50%) scale(0.95)`;
+          logo.style.transform = `translate(-50%, -50%) scale(0.9)`;
           logo.style.opacity = "1";
           logo.style.filter = "blur(0px) brightness(1)";
           glow.style.opacity = "0.2";
@@ -70,10 +51,13 @@ const AppleScene = () => {
       };
 
       window.addEventListener("scroll", onScroll, { passive: true });
-      return () => window.removeEventListener("scroll", onScroll);
+      // Run once on mount
+      onScroll();
+      cleanup = () => window.removeEventListener("scroll", onScroll);
     };
 
-    const cleanup = init();
+    // Wait for 3D model to load
+    setTimeout(tryInject, 1500);
     return () => { if (cleanup) cleanup(); };
   }, []);
 
