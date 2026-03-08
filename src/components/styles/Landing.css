@@ -161,6 +161,9 @@
   font-weight: 500;
   font-family: "Geist", sans-serif;
 }
+.landing-intro h1 span {
+  color: var(--accentColor);
+}
 .landing-info {
   position: absolute;
   right: 50%;
@@ -219,6 +222,15 @@ h2.landing-info-h2 {
   left: 0;
 }
 
+/* ===== SCRAMBLE H1 ===== */
+.scramble-text {
+  cursor: crosshair;
+  transition: color 0.2s;
+}
+.scramble-text:hover {
+  color: #c481ff;
+}
+
 /* TYPEWRITER */
 .typewriter-line {
   display: flex;
@@ -234,6 +246,10 @@ h2.landing-info-h2 {
   text-transform: uppercase;
   font-family: "Geist", monospace;
 }
+.typewriter-text.glitch-active {
+  color: #c481ff;
+  text-shadow: 0 0 8px rgba(196,129,255,0.8);
+}
 .typewriter-cursor {
   font-size: 13px;
   color: #c481ff;
@@ -242,6 +258,37 @@ h2.landing-info-h2 {
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+/* ===== MOODBOARD TAGS ===== */
+.landing-tags {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.landing-tags .tag {
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.03);
+  animation: fadeSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.landing-tags .tag:nth-child(1) { animation-delay: 0.7s; }
+.landing-tags .tag:nth-child(2) { animation-delay: 0.85s; }
+.landing-tags .tag:nth-child(3) { animation-delay: 1s; }
+.landing-tags .tag:hover {
+  border-color: rgba(196,129,255,0.5);
+  color: #c481ff;
+  transition: all 0.3s ease;
+}
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media screen and (min-width: 500px) {
@@ -277,57 +324,4 @@ h2.landing-info-h2 {
   .landing-info h3 { font-size: 35px; }
   .landing-info h2 { font-size: 65px; line-height: 62px; }
   h2.landing-info-h2 { font-size: 75px; }
-}
-
-/* ===== CINEMATIC NAME ENTRY ===== */
-.landing-hello {
-  will-change: transform, opacity;
-}
-
-.landing-name-wrap {
-  overflow: visible;
-}
-
-.landing-name-mask {
-  overflow: hidden;
-  line-height: 1.05;
-}
-
-.landing-name-ravi {
-  margin: 0;
-  letter-spacing: 2px;
-  font-size: 28px;
-  font-weight: 700;
-  font-family: "Geist", sans-serif;
-  will-change: transform, opacity;
-  line-height: 1.05;
-}
-
-.landing-name-kumar {
-  margin: 0;
-  letter-spacing: 2px;
-  font-size: 28px;
-  font-weight: 700;
-  font-family: "Geist", sans-serif;
-  will-change: transform, opacity;
-  line-height: 1.05;
-}
-
-.landing-name-kumar span {
-  color: var(--accentColor);
-}
-
-/* Override original h1 styles for new structure */
-.landing-intro h1 {
-  display: none;
-}
-
-@media screen and (min-width: 500px) {
-  .landing-name-ravi, .landing-name-kumar { font-size: 32px; }
-}
-@media screen and (min-width: 768px) {
-  .landing-name-ravi, .landing-name-kumar { font-size: 44px; }
-}
-@media screen and (min-width: 1600px) {
-  .landing-name-ravi, .landing-name-kumar { font-size: 64px; }
 }
