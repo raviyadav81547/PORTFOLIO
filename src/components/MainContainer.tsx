@@ -1,4 +1,5 @@
 import { lazy, PropsWithChildren, Suspense, useEffect, useState } from "react";
+import Lenis from "lenis";
 import About from "./About";
 import AppleScene from "./AppleScene";
 import Career from "./Career";
@@ -18,6 +19,40 @@ const MainContainer = ({ children }: PropsWithChildren) => {
   const [isDesktopView, setIsDesktopView] = useState<boolean>(
     window.innerWidth > 1024
   );
+
+  // ✅ LENIS SMOOTH SCROLL
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.4,          // Scroll speed — 1.4s feel
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Expo ease out
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      wheelMultiplier: 0.9,
+      touchMultiplier: 1.8,
+      infinite: false,
+    });
+
+    // Sync Lenis with GSAP ScrollTrigger if available
+    lenis.on("scroll", () => {
+      if (typeof window !== "undefined" && (window as any).ScrollTrigger) {
+        (window as any).ScrollTrigger.update();
+      }
+    });
+
+    // RAF loop
+    let rafId: number;
+    const raf = (time: number) => {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    };
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      lenis.destroy();
+    };
+  }, []);
 
   useEffect(() => {
     const resizeHandler = () => {
