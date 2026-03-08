@@ -455,3 +455,49 @@ h2.landing-info-h2 {
   color: #c481ff;
   transition: all 0.3s ease;
 }
+
+/* ===== SCRAMBLE CURSOR ===== */
+.scramble-text {
+  cursor: crosshair;
+  transition: color 0.1s;
+}
+.scramble-text:hover {
+  color: #c481ff;
+}
+
+/* ===== TYPEWRITER ===== */
+.typewriter-line {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 10px;
+  height: 20px;
+}
+.typewriter-text {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.5);
+  text-transform: uppercase;
+  font-family: "Geist", monospace;
+}
+.typewriter-cursor {
+  font-size: 14px;
+  color: #c481ff;
+  animation: blink 0.8s step-end infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ===== GLITCH ===== */
+.glitch-active {
+  color: #ff4dff !important;
+  text-shadow: 2px 0 #00ffff, -2px 0 #ff0080;
+  animation: glitchShake 0.05s linear;
+}
+@keyframes glitchShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
