@@ -1,105 +1,103 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import "./styles/Certifications.css";
 
 const certs = [
   {
+    id: "google",
     name: "Google AI Essentials",
     issuer: "Google",
     year: "2024",
-    color: "#4285F4",
     image: "/images/certs/cert_google.webp",
-    link: "#",
+    color: "#4285F4",
   },
   {
-    name: "Microsoft Azure AI",
-    issuer: "Microsoft",
-    year: "2024",
-    color: "#00A4EF",
-    image: "/images/certs/cert_microsoft.webp",
-    link: "#",
-  },
-  {
-    name: "Be10x AI Tools",
-    issuer: "Be10x",
-    year: "2024",
-    color: "#FF6B35",
-    image: "/images/certs/cert_be10x.webp",
-    link: "#",
-  },
-  {
-    name: "Outskill AI",
-    issuer: "Outskill",
-    year: "2024",
-    color: "#00E676",
-    image: "/images/certs/cert_outskill.webp",
-    link: "#",
-  },
-  {
-    name: "Apple Developer",
-    issuer: "Apple",
-    year: "2024",
-    color: "#ffffff",
-    image: "/images/certs/cert_apple.webp",
-    link: "#",
-  },
-  {
-    name: "GenAI Fundamentals",
-    issuer: "Google Cloud",
-    year: "2024",
-    color: "#c481ff",
+    id: "genai",
+    name: "Gen AI Developer",
+    issuer: "IBM × Microsoft",
+    year: "2025",
     image: "/images/certs/cert_genai.webp",
-    link: "#",
+    color: "#c481ff",
+  },
+  {
+    id: "outskill",
+    name: "Generative AI Mastermind",
+    issuer: "Outskill",
+    year: "2025",
+    image: "/images/certs/cert_outskill.webp",
+    color: "#39D353",
+  },
+  {
+    id: "be10x",
+    name: "AI Tools Workshop",
+    issuer: "Be10x",
+    year: "2025",
+    image: "/images/certs/cert_be10x.webp",
+    color: "#FF8C00",
+  },
+  {
+    id: "semrush",
+    name: "AI-Powered Marketer",
+    issuer: "Semrush Academy",
+    year: "2025",
+    image: "/images/certs/cert_semrush.webp",
+    color: "#FF6B35",
+  },
+  {
+    id: "apple",
+    name: "Accredited Creator",
+    issuer: "Apple Creator Studio",
+    year: "2025",
+    image: "/images/certs/cert_apple.webp",
+    color: "#E8E8E8",
   },
 ];
 
 const Certifications = () => {
+  const trackRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const cards = document.querySelectorAll<HTMLElement>(".cert-card");
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry, i) => {
-          if (entry.isIntersecting) {
-            setTimeout(() => {
-              (entry.target as HTMLElement).classList.add("cert-visible");
-            }, i * 100);
-          }
-        });
-      },
-      { threshold: 0.1 }
-    );
-    cards.forEach((c) => io.observe(c));
-    return () => io.disconnect();
+    const cards = trackRef.current?.querySelectorAll<HTMLElement>(".cert-card");
+    if (!cards) return;
+
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).classList.add("cert-visible");
+        }
+      });
+    }, { threshold: 0.15 });
+
+    cards.forEach((c) => obs.observe(c));
+    return () => obs.disconnect();
   }, []);
 
   return (
-    <div className="cert-section" id="certifications">
-      <div className="cert-container section-container">
-        <div className="cert-header reveal-up">
-          <span className="cert-eyebrow">VERIFIED SKILLS</span>
-          <h2>Certifi<span>cations</span></h2>
-          <p className="cert-sub">Industry-recognized credentials in AI, Cloud & Automation</p>
-        </div>
+    <div className="cert-section section-container" id="certifications">
+      <h3 className="cert-heading">Certifications</h3>
+      <p className="cert-sub">Verified credentials & achievements</p>
 
-        <div className="cert-grid">
-          {certs.map((cert, i) => (
-            <a
-              href={cert.link}
-              target="_blank"
-              className="cert-card"
-              key={i}
-              style={{ "--cert-color": cert.color } as React.CSSProperties}
-            >
-              <div className="cert-img-wrap">
-                <img src={cert.image} alt={cert.name} className="cert-thumb" />
-                <div className="cert-img-glow" />
-              </div>
-              <div className="cert-footer">
-                <span className="cert-badge">✓ Verified</span>
-                <span className="cert-arrow">↗</span>
-              </div>
-            </a>
-          ))}
-        </div>
+      <div className="cert-grid" ref={trackRef}>
+        {certs.map((c, i) => (
+          <div
+            key={c.id}
+            className="cert-card"
+            style={{
+              "--cert-color": c.color,
+              "--delay": `${i * 0.1}s`,
+            } as React.CSSProperties}
+          >
+            <div className="cert-img-wrap">
+              <img src={c.image} alt={c.name} loading="lazy" />
+              <div className="cert-img-overlay" />
+            </div>
+            <div className="cert-info">
+              <span className="cert-issuer">{c.issuer}</span>
+              <h4 className="cert-name">{c.name}</h4>
+              <span className="cert-year">{c.year}</span>
+            </div>
+            <div className="cert-glow" />
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -1,4 +1,8 @@
 import { lazy, PropsWithChildren, Suspense, useEffect, useState } from "react";
+import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 import About from "./About";
 import Career from "./Career";
 import Certifications from "./Certifications";
@@ -10,6 +14,10 @@ import SocialIcons from "./SocialIcons";
 import WhatIDo from "./WhatIDo";
 import Work from "./Work";
 import setSplitText from "./utils/splitText";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const TechStack = lazy(() => import("./TechStack"));
 
@@ -28,7 +36,47 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     return () => window.removeEventListener("resize", resizeHandler);
   }, [isDesktopView]);
 
-  // SCROLL PROGRESS BAR
+  // ── LENIS SMOOTH SCROLL ──
+  useEffect(() => {
+    let lenis: any;
+    let rafId: number;
+
+    const initLenis = async () => {
+      try {
+        const LenisModule = await import("lenis");
+        const Lenis = LenisModule.default;
+
+        lenis = new Lenis({
+          duration: 1.4,
+          easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          orientation: "vertical",
+          smoothWheel: true,
+          wheelMultiplier: 1.0,
+          touchMultiplier: 1.5,
+        });
+
+        // Sync Lenis with GSAP ScrollTrigger
+        lenis.on("scroll", ScrollTrigger.update);
+
+        gsap.ticker.add((time: number) => {
+          lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
+
+      } catch (e) {
+        console.warn("Lenis not available, using native scroll");
+      }
+    };
+
+    initLenis();
+
+    return () => {
+      if (lenis) lenis.destroy();
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  // ── SCROLL PROGRESS BAR ──
   useEffect(() => {
     const bar = document.createElement("div");
     bar.className = "scroll-indicator";
@@ -44,7 +92,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     return () => { window.removeEventListener("scroll", onScroll); bar.remove(); };
   }, []);
 
-  // SCROLL REVEAL
+  // ── SCROLL REVEAL ──
   useEffect(() => {
     const revealEls = document.querySelectorAll(".reveal-up");
     const io = new IntersectionObserver(
@@ -61,7 +109,7 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     return () => io.disconnect();
   }, []);
 
-  // 3D CARD TILT
+  // ── 3D CARD TILT ──
   useEffect(() => {
     const addTilt = () => {
       document.querySelectorAll<HTMLElement>(".work-box").forEach((card) => {
@@ -76,6 +124,27 @@ const MainContainer = ({ children }: PropsWithChildren) => {
     };
     const t = setTimeout(addTilt, 1000);
     return () => clearTimeout(t);
+  }, []);
+
+
+  // ── LENIS SMOOTH SCROLL ──
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      touchMultiplier: 2,
+    });
+
+    // Sync Lenis with GSAP ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      lenis.destroy();
+      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+    };
   }, []);
 
   return (

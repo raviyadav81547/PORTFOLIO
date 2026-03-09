@@ -212,3 +212,158 @@ h2.landing-info-h2 {
   .landing-info h2 { font-size: 65px; line-height: 62px; }
   h2.landing-info-h2 { font-size: 75px; }
 }
+
+/* ===== CLEAN ANIMATION FIX ===== */
+.landing-info-clip {
+  overflow: hidden;
+  position: relative;
+  line-height: 1;
+}
+.landing-word {
+  font-family: "Geist", sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #ffffff;
+  will-change: transform, opacity;
+}
+.landing-word.purple { color: #c481ff; }
+
+/* Hide the duplicate h2 tags that cause overlap */
+.landing-info > h2 { display: none !important; }
+.landing-info-h2 { display: none !important; }
+
+@media screen and (min-width: 768px) {
+  .landing-word { font-size: 55px; }
+}
+@media screen and (min-width: 1600px) {
+  .landing-word { font-size: 75px; }
+}
+
+/* ===== 7 COLOR 3D NAME ===== */
+.hello-text {
+  margin: 0 0 4px 0;
+  color: var(--accentColor);
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 2px;
+}
+
+.name-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  line-height: 1;
+  margin: 0;
+}
+
+.ravi-row {
+  margin-bottom: -8px;
+}
+
+.kumar-row {
+  margin-bottom: 10px;
+}
+
+.name-letter {
+  font-family: "Geist", sans-serif;
+  font-weight: 900;
+  font-size: clamp(52px, 7vw, 85px);
+  line-height: 1;
+  transition: color 0.1s;
+  will-change: transform;
+  user-select: none;
+}
+
+.kumar-row .name-letter {
+  font-size: clamp(58px, 8vw, 96px);
+}
+
+/* hover bounce on each letter */
+.name-letter:hover {
+  transform: translateY(-10px) scale(1.15) !important;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+@media (max-width: 768px) {
+  .name-letter { font-size: 48px; }
+  .kumar-row .name-letter { font-size: 54px; }
+}
+@media (max-width: 480px) {
+  .name-letter { font-size: 38px; }
+  .kumar-row .name-letter { font-size: 44px; }
+}
+
+/* ══════════════════════════════
+   NEXT LEVEL 3D NAME
+══════════════════════════════ */
+.hello-text {
+  margin: 0 0 6px;
+  color: var(--accentColor);
+  font-size: clamp(16px, 2vw, 24px);
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.name-wrap {
+  perspective: 600px;
+  margin-bottom: 12px;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+  line-height: 1;
+}
+
+.ravi-row  { margin-bottom: -6px; }
+.kumar-row { margin-bottom: 8px; }
+
+/* Each letter */
+.nl {
+  font-family: "Geist", sans-serif;
+  font-weight: 900;
+  line-height: 1;
+  cursor: default;
+  user-select: none;
+  will-change: transform;
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  /* RAVI default size */
+  font-size: clamp(50px, 7vw, 82px);
+}
+
+.kumar-row .nl {
+  font-size: clamp(56px, 8.5vw, 96px);
+}
+
+.nl:hover {
+  transform: translateY(-14px) scale(1.2) rotate(0deg) !important;
+  filter: brightness(1.4);
+}
+
+/* Shimmer shine sweep on hover */
+.name-wrap:hover .nl {
+  animation: letterShine 0.6s ease forwards;
+}
+@keyframes letterShine {
+  0%   { filter: brightness(1); }
+  50%  { filter: brightness(1.6) drop-shadow(0 0 8px currentColor); }
+  100% { filter: brightness(1.2); }
+}
+
+@media (max-width: 1024px) {
+  .nl { font-size: clamp(42px, 6vw, 65px); }
+  .kumar-row .nl { font-size: clamp(48px, 7vw, 76px); }
+}
+@media (max-width: 600px) {
+  .nl { font-size: 40px; }
+  .kumar-row .nl { font-size: 46px; }
+  .name-row { gap: 1px; }
+}
+@media (max-width: 380px) {
+  .nl { font-size: 34px; }
+  .kumar-row .nl { font-size: 40px; }
+}
