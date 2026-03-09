@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import "./styles/Certifications.css";
 
 const certs = [
@@ -6,55 +6,53 @@ const certs = [
     name: "Google AI Essentials",
     issuer: "Google",
     year: "2024",
-    logo: "https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png",
     color: "#4285F4",
+    image: "/images/certs/cert_google.webp",
     link: "#",
   },
   {
     name: "Microsoft Azure AI",
     issuer: "Microsoft",
     year: "2024",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Microsoft_logo.svg/512px-Microsoft_logo.svg.png",
     color: "#00A4EF",
+    image: "/images/certs/cert_microsoft.webp",
     link: "#",
   },
   {
     name: "Be10x AI Tools",
     issuer: "Be10x",
     year: "2024",
-    logo: "",
     color: "#FF6B35",
+    image: "/images/certs/cert_be10x.webp",
     link: "#",
   },
   {
-    name: "Prompt Engineering",
-    issuer: "DeepLearning.AI",
+    name: "Outskill AI",
+    issuer: "Outskill",
     year: "2024",
-    logo: "",
-    color: "#c481ff",
+    color: "#00E676",
+    image: "/images/certs/cert_outskill.webp",
+    link: "#",
+  },
+  {
+    name: "Apple Developer",
+    issuer: "Apple",
+    year: "2024",
+    color: "#ffffff",
+    image: "/images/certs/cert_apple.webp",
     link: "#",
   },
   {
     name: "GenAI Fundamentals",
     issuer: "Google Cloud",
     year: "2024",
-    logo: "",
-    color: "#34A853",
-    link: "#",
-  },
-  {
-    name: "AI Automation Pro",
-    issuer: "Coursera",
-    year: "2023",
-    logo: "",
-    color: "#0056D2",
+    color: "#c481ff",
+    image: "/images/certs/cert_genai.webp",
     link: "#",
   },
 ];
 
 const Certifications = () => {
-  const trackRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const cards = document.querySelectorAll<HTMLElement>(".cert-card");
     const io = new IntersectionObserver(
@@ -63,7 +61,7 @@ const Certifications = () => {
           if (entry.isIntersecting) {
             setTimeout(() => {
               (entry.target as HTMLElement).classList.add("cert-visible");
-            }, i * 80);
+            }, i * 100);
           }
         });
       },
@@ -82,7 +80,7 @@ const Certifications = () => {
           <p className="cert-sub">Industry-recognized credentials in AI, Cloud & Automation</p>
         </div>
 
-        <div className="cert-grid" ref={trackRef}>
+        <div className="cert-grid">
           {certs.map((cert, i) => (
             <a
               href={cert.link}
@@ -91,20 +89,9 @@ const Certifications = () => {
               key={i}
               style={{ "--cert-color": cert.color } as React.CSSProperties}
             >
-              <div className="cert-glow" />
-              <div className="cert-top">
-                {cert.logo ? (
-                  <img src={cert.logo} alt={cert.issuer} className="cert-logo" />
-                ) : (
-                  <div className="cert-logo-placeholder" style={{ background: cert.color + "22", color: cert.color }}>
-                    {cert.issuer.slice(0, 2).toUpperCase()}
-                  </div>
-                )}
-                <span className="cert-year">{cert.year}</span>
-              </div>
-              <div className="cert-body">
-                <h4 className="cert-name">{cert.name}</h4>
-                <p className="cert-issuer">{cert.issuer}</p>
+              <div className="cert-img-wrap">
+                <img src={cert.image} alt={cert.name} className="cert-thumb" />
+                <div className="cert-img-glow" />
               </div>
               <div className="cert-footer">
                 <span className="cert-badge">✓ Verified</span>
